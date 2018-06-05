@@ -11,7 +11,7 @@ The per-second growth-rate for manna is defined as environment variables in the 
 
 Usage in apps running across multiple pods:
 ```
-bqManna := manna.NewBar("gcloud-bigquery") // Which manna service do we connect to?
+bqManna := manna.NewBar("gcloud-bigquery").WithPort(9999) // Which manna service do we connect to?
 bqManna.Timeout(60) // In seconds - give up if no available manna for a minute in this case. 0 = infinite
 bqManna.Protect(func() {
     // This block is synchronous - i.e., returns only when protected func returns
@@ -33,4 +33,4 @@ On every restart, manna is to grow at its per-second growth rate. Thus, a crash 
 In the future, we can consider exploiting the `SIGTERM` issued by Kubernetes to our pod to save our count-state and elegantly restore it upon pod restart.
 
 ### Misc
-All clients talk to the master manna note (the central point-of-failure) via gRPC.
+All clients talk to the master manna note (the central point-of-failure) via gRPC. The `manna.Bar` type is a struct (passed by value) and only holds a string identifying the service to attempt connecting to. The actual connection is made (_sort of_ lazily) when `Protect` is called.
