@@ -11,8 +11,9 @@ The per-second growth-rate for manna is defined as environment variables in the 
 
 Usage in apps running across multiple pods:
 ```
-manna.Timeout(60) // In seconds - give up if no available manna for a minute in this case. 0 = infinite
-manna.Protect(func() {
+bqManna := manna.NewBar("gcloud-bigquery") // Which manna service do we connect to?
+bqManna.Timeout(60) // In seconds - give up if no available manna for a minute in this case. 0 = infinite
+bqManna.Protect(func() {
     // This block is synchronous - i.e., returns only when protected func returns
 })
 ```
